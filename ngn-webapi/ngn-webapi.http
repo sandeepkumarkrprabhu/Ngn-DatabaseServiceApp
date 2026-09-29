@@ -1,0 +1,6 @@
+@ngn_webapi_HostAddress = http://localhost:5136
+
+GET {{ngn_webapi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

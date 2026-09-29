@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="ngn-data/ngn-data.csproj" />
+  <Project Path="ngn-DbModels/ngn-DbModels.csproj" />
+  <Project Path="ngn-services/ngn-services.csproj" Id="e4e19ca4-a872-471b-b330-323a70cda5b4" />
+  <Project Path="ngn-webapi/ngn-webapi.csproj" />
+</Solution>
