@@ -1,4 +1,3 @@
-﻿
 using Microsoft.EntityFrameworkCore;
 using ngn_DbModels.Models;
 
@@ -8,7 +7,6 @@ namespace ngn_data
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
-
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -19,6 +17,19 @@ namespace ngn_data
                       .WithMany(g => g.Projects)
                       .HasForeignKey(p => p.ProjectGroupId)
                       .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity<EquipmentPartNumber>(entity =>
+            {
+                entity.HasOne(e => e.Equipment)
+                      .WithMany(e => e.PartNumbers)
+                      .HasForeignKey(e => e.EquipmentId)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasIndex(e => new { e.EquipmentId, e.PartNumber })
+                      .IsUnique();
+
+                entity.HasIndex(e => new { e.EquipmentId, e.IsActive });
             });
 
             base.OnModelCreating(modelBuilder);
@@ -40,6 +51,7 @@ namespace ngn_data
         public DbSet<NatureOfProblemMaster> NatureOfProblem { get; set; }
         public DbSet<FlashNewsNotification> FlashNewsNotification { get; set; }
         public DbSet<EquipmentMaster> Equipment { get; set; }
+        public DbSet<EquipmentPartNumber> EquipmentPartNumbers { get; set; }
         public DbSet<ContactUs> ContactUs { get; set; }
         public DbSet<CallTypeMaster> CallTypeMaster { get; set; }
         public DbSet<MasterData> MasterData { get; set; }
@@ -49,7 +61,5 @@ namespace ngn_data
         public DbSet<CallRegisterForOthers> CallRegisterForOthers { get; set; }
         public DbSet<Solution> Solutions { get; set; }
         public DbSet<CaseTechnicalComments> CaseTechnicalComments { get; set; }
-
-
     }
 }
