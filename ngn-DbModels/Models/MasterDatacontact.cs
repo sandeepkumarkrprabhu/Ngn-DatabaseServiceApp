@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ngn_DbModels.Models
@@ -8,12 +8,12 @@ namespace ngn_DbModels.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ContactID { get; set; }
-        
+
+        [Required]
         [MaxLength(100)]
-        public string ContactName { get; set; }
+        public string ContactName { get; set; } = string.Empty;
 
         [MaxLength(20)]
-        public string ContactNumber { get; set; }
-
+        public string? ContactNumber { get; set; }
     }
 }
