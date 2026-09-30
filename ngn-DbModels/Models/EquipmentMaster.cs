@@ -22,6 +22,12 @@ namespace ngn_DbModels.Models
         [ForeignKey(nameof(ProjectId))]
         public ProjectMaster Project { get; set; } = null!;
 
+        public bool IsActive { get; set; } = true;
+
+        public DateTime CreatedDate { get; set; }
+
+        public DateTime UpdatedDate { get; set; }
+
         public ICollection<EquipmentPartNumber> PartNumbers { get; set; }
             = new List<EquipmentPartNumber>();
     }
