@@ -1,4 +1,3 @@
-﻿
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -12,11 +11,11 @@ namespace ngn_DbModels.Models
 
         [Required]
         [MaxLength(200)]
-        public string NatureOfProblemName { get; set; }
+        public string NatureOfProblemName { get; set; } = string.Empty;
 
-        // Navigation property
+        public int? ProjectItemId { get; set; }
+
         [ForeignKey(nameof(ProjectItemId))]
-        public ProjectItemDetails ProjectItemId { get; set; }
-
+        public ProjectItemDetails? ProjectItem { get; set; }
     }
 }
