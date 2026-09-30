@@ -1,4 +1,3 @@
-﻿
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -15,13 +14,16 @@ namespace ngn_DbModels.Models
         public string ToEmailAddress { get; set; } = string.Empty;
 
         [MaxLength(100)]
-        public string CCEmailAddress { get; set; } = string.Empty;
+        public string? CCEmailAddress { get; set; }
 
-        // Navigation property
+        [Required]
+        public int ProjectId { get; set; }
+
         [ForeignKey(nameof(ProjectId))]
-        public ProjectMaster ProjectId { get; set; }
+        public ProjectMaster Project { get; set; } = null!;
 
-        public bool isActive { get; set; } = true;
-        public bool IsCustomerEmailOverride { get; set; } = false;
+        public bool IsActive { get; set; } = true;
+
+        public bool IsCustomerEmailOverride { get; set; }
     }
 }
