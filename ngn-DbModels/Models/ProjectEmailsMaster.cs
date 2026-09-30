@@ -10,10 +10,10 @@ namespace ngn_DbModels.Models
         public int ProjectEmailId { get; set; }
 
         [Required]
-        [MaxLength(100)]
+        [MaxLength(254)]
         public string ToEmailAddress { get; set; } = string.Empty;
 
-        [MaxLength(100)]
+        [MaxLength(254)]
         public string? CCEmailAddress { get; set; }
 
         [Required]
