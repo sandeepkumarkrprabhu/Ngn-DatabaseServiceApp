@@ -1,4 +1,3 @@
-﻿
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -9,32 +8,54 @@ namespace ngn_DbModels.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public int projectid { get; set; }
 
+        [Required]
+        public int ProjectId { get; set; }
+
+        [Required]
         public int CircleCityId { get; set; }
-        public string SSA { get; set; }
-        public string CityType { get; set; }
-        public string SiteName { get; set; }
-        public string ExchangeName { get; set; }
-        public string SiteAddress { get; set; }
-        public string IPAddress { get; set; }
-        public string EquipmentName { get; set; }
-        public string Pincode { get; set; }
+
+        [MaxLength(100)]
+        public string? SSA { get; set; }
+
+        [MaxLength(50)]
+        public string? CityType { get; set; }
+
+        [MaxLength(100)]
+        public string? SiteName { get; set; }
+
+        [MaxLength(100)]
+        public string? ExchangeName { get; set; }
+
+        [MaxLength(500)]
+        public string? SiteAddress { get; set; }
+
+        [MaxLength(45)]
+        public string? IPAddress { get; set; }
+
+        [MaxLength(100)]
+        public string? EquipmentName { get; set; }
+
+        [MaxLength(10)]
+        public string? Pincode { get; set; }
 
         public int? BSNLContactId { get; set; }
         public int? HCLContactId { get; set; }
-        public int UTContactId { get; set; }
+        public int? UTContactId { get; set; }
 
-        // Navigation properties
+        [ForeignKey(nameof(ProjectId))]
+        public ProjectMaster Project { get; set; } = null!;
 
-        public ProjectMaster? Project { get; set; } = null!;
+        [ForeignKey(nameof(CircleCityId))]
+        public CircleMaster CircleCity { get; set; } = null!;
 
-        public CircleMaster? CircleCity { get; set; } = null!;
-
+        [ForeignKey(nameof(BSNLContactId))]
         public MasterDatacontact? BSNLContact { get; set; }
 
+        [ForeignKey(nameof(HCLContactId))]
         public MasterDatacontact? HCLContact { get; set; }
 
+        [ForeignKey(nameof(UTContactId))]
         public MasterDatacontact? UTContact { get; set; }
     }
 }
