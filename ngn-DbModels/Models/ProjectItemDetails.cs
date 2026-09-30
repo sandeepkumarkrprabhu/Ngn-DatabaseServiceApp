@@ -9,16 +9,17 @@ namespace ngn_DbModels.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ProjectItemId { get; set; }
 
+        [Required]
         [MaxLength(100)]
-        public string? ItemName { get; set; }
+        public string ItemName { get; set; } = string.Empty;
 
         [MaxLength(100)]
         public string? SubType { get; set; }
 
-        [MaxLength(50)]
+        [MaxLength(100)]
         public string? EquipmentName { get; set; }
 
-        [MaxLength(255)]
+        [MaxLength(500)]
         public string? ItemDescription { get; set; }
 
         [MaxLength(50)]
