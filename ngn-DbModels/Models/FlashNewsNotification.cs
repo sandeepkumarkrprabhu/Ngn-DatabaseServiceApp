@@ -1,34 +1,16 @@
-﻿
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+
 
 namespace ngn_DbModels.Models
 {
     public class FlashNewsNotification
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-
-        [MaxLength(50)]
         public string Code { get; set; } = null!;
-
-        [MaxLength(100)]
         public string Title { get; set; } = null!;
-
-        [MaxLength(200)]
         public string Message { get; set; } = null!;
-
-        [MaxLength(50)]
         public string Priority { get; set; }
-
-        [MaxLength(100)]
         public string Category { get; set; }
-
-        [MaxLength(200)]
         public string TargetAudience { get; set; }
-
-        [MaxLength(100)]
         public string? TargetCircle { get; set; }
 
         public DateTime StartDate { get; set; }
