@@ -12,10 +12,6 @@ namespace ngn_data.Configurations
             builder.Property(x => x.TechnicalPersonName).HasMaxLength(100);
             builder.Property(x => x.TechnicalPersonNo).HasMaxLength(100);
             builder.Property(x => x.TechnicalComments).HasMaxLength(400);
-            builder.HasOne<Solution>()
-                   .WithMany()
-                   .HasForeignKey(x => x.SolutionId)
-                   .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
