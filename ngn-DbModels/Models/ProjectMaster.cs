@@ -1,22 +1,11 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ngn_DbModels.Models
 {
     public class ProjectMaster
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ProjectId { get; set; }
-
-        [Required]
-        [MaxLength(100)]
         public string ProjectName { get; set; } = string.Empty;
-
-        [Required]
         public int ProjectGroupId { get; set; }
-
-        [ForeignKey(nameof(ProjectGroupId))]
         public ProjectGroupMaster ProjectGroup { get; set; } = null!;
 
         public bool IsActive { get; set; } = true;
