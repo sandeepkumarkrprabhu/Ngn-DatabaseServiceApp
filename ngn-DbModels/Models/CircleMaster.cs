@@ -1,28 +1,14 @@
-﻿
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ngn_DbModels.Models
 {
     public class CircleMaster
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CircleCityId { get; set; }
+        public string CircleCode { get; set; } = string.Empty;
+        public string CircleName { get; set; } = string.Empty;
+        public string CityCode { get; set; } = string.Empty;
+        public string CityName { get; set; } = string.Empty;
 
-        [MaxLength(5)] 
-        [Required]
-        public string circleCode { get; set; }
-
-        [MaxLength(100)]
-        public string circleName { get; set; }
-
-        [MaxLength(5)]
-        [Required]
-        public string CityCode { get; set; }
-
-        [MaxLength(100)]
-        public string CityName { get; set; }
-
+        public ICollection<MasterData> MasterData { get; set; } = new List<MasterData>();
     }
 }
