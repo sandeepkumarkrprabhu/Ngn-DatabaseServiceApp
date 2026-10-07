@@ -1,9 +1,9 @@
-
 namespace ngn_DbModels.Models
 {
     public class SeverityMaster
     {
         public int SeverityId { get; set; }
+        public int ProjectId { get; set; }
         public string SeverityCode { get; set; } = string.Empty;
         public string SeverityName { get; set; } = string.Empty;
         public string? Level { get; set; }
@@ -12,5 +12,7 @@ namespace ngn_DbModels.Models
 
         public decimal ResolutionSLA { get; set; }
         public string? Description { get; set; }
+
+        public ProjectMaster Project { get; set; } = null!;
     }
 }
