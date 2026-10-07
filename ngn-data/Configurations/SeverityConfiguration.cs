@@ -15,7 +15,7 @@ namespace ngn_data.Configurations
             builder.Property(x => x.ResponseSLA).HasPrecision(10, 2);
             builder.Property(x => x.ResolutionSLA).HasPrecision(10, 2);
             builder.Property(x => x.Description).HasMaxLength(100);
-            builder.HasIndex(x => x.SeverityCode).IsUnique();
+            //builder.HasIndex(x => x.SeverityCode).IsUnique();
         }
     }
 }
