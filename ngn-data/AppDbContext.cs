@@ -12,6 +12,13 @@ namespace ngn_data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+
+            modelBuilder.Entity<SeverityMaster>()
+                .HasOne(s => s.Project)
+                .WithMany(p => p.SeverityMasters)
+                .HasForeignKey(s => s.ProjectId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             base.OnModelCreating(modelBuilder);
         }
 
