@@ -19,5 +19,6 @@ namespace ngn_DbModels.Models
         public ICollection<EquipmentMaster> Equipment { get; set; } = new List<EquipmentMaster>();
         public ICollection<MasterData> MasterData { get; set; } = new List<MasterData>();
         public ICollection<SeverityMaster> SeverityMasters { get; set; } = new List<SeverityMaster>();
+        public ICollection<FailureSymptomsMaster> FailureSymptoms { get; set; } = new List<FailureSymptomsMaster>();
     }
 }
