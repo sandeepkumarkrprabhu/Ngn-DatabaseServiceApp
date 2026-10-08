@@ -43,6 +43,7 @@ namespace ngn_data
         public DbSet<FlashNewsNotification> FlashNewsNotification { get; set; }
         public DbSet<EquipmentMaster> Equipment { get; set; }
         public DbSet<EquipmentPartNumber> EquipmentPartNumbers { get; set; }
+        public DbSet<FailureSymptomsMaster> FailureSymptoms { get; set; }
 
         public DbSet<ContactUs> ContactUs { get; set; }
         public DbSet<CallTypeMaster> CallTypeMaster { get; set; }
