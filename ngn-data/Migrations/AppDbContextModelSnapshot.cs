@@ -435,6 +435,30 @@ namespace ngn_data.Migrations
                     b.ToTable("EquipmentPartNumbers");
                 });
 
+            modelBuilder.Entity("ngn_DbModels.Models.FailureSymptomsMaster", b =>
+                {
+                    b.Property<int>("FailureSymptomsId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FailureSymptomsId"));
+
+                    b.Property<string>("FailureSymptomsName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("int");
+
+                    b.HasKey("FailureSymptomsId");
+
+                    b.HasIndex("ProjectId", "FailureSymptomsName")
+                        .IsUnique();
+
+                    b.ToTable("FailureSymptoms");
+                });
+
             modelBuilder.Entity("ngn_DbModels.Models.FlashNewsNotification", b =>
                 {
                     b.Property<int>("Id")
@@ -843,9 +867,6 @@ namespace ngn_data.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.HasIndex("SeverityCode")
-                        .IsUnique();
-
                     b.ToTable("SeverityMasters");
                 });
 
@@ -1087,6 +1108,17 @@ namespace ngn_data.Migrations
                     b.Navigation("Equipment");
                 });
 
+            modelBuilder.Entity("ngn_DbModels.Models.FailureSymptomsMaster", b =>
+                {
+                    b.HasOne("ngn_DbModels.Models.ProjectMaster", "Project")
+                        .WithMany("FailureSymptoms")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Project");
+                });
+
             modelBuilder.Entity("ngn_DbModels.Models.MasterData", b =>
                 {
                     b.HasOne("ngn_DbModels.Models.MasterDatacontact", "BSNLContact")
@@ -1212,6 +1244,8 @@ namespace ngn_data.Migrations
                     b.Navigation("EmailFeatureMappings");
 
                     b.Navigation("Equipment");
+
+                    b.Navigation("FailureSymptoms");
 
                     b.Navigation("MasterData");
 

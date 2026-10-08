@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ngn_data.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitialCreateSetup : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -147,24 +147,6 @@ namespace ngn_data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SeverityMasters",
-                columns: table => new
-                {
-                    SeverityId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    SeverityCode = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
-                    SeverityName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Level = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
-                    ResponseSLA = table.Column<decimal>(type: "decimal(10,2)", precision: 10, scale: 2, nullable: false),
-                    ResolutionSLA = table.Column<decimal>(type: "decimal(10,2)", precision: 10, scale: 2, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SeverityMasters", x => x.SeverityId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Solutions",
                 columns: table => new
                 {
@@ -259,6 +241,26 @@ namespace ngn_data.Migrations
                     table.PrimaryKey("PK_Equipment", x => x.EquipmentId);
                     table.ForeignKey(
                         name: "FK_Equipment_ProjectMasters_ProjectId",
+                        column: x => x.ProjectId,
+                        principalTable: "ProjectMasters",
+                        principalColumn: "ProjectId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FailureSymptoms",
+                columns: table => new
+                {
+                    FailureSymptomsId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FailureSymptomsName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    ProjectId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FailureSymptoms", x => x.FailureSymptomsId);
+                    table.ForeignKey(
+                        name: "FK_FailureSymptoms_ProjectMasters_ProjectId",
                         column: x => x.ProjectId,
                         principalTable: "ProjectMasters",
                         principalColumn: "ProjectId",
@@ -385,6 +387,31 @@ namespace ngn_data.Migrations
                     table.PrimaryKey("PK_ProjectItemDetails", x => x.ProjectItemId);
                     table.ForeignKey(
                         name: "FK_ProjectItemDetails_ProjectMasters_ProjectId",
+                        column: x => x.ProjectId,
+                        principalTable: "ProjectMasters",
+                        principalColumn: "ProjectId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SeverityMasters",
+                columns: table => new
+                {
+                    SeverityId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProjectId = table.Column<int>(type: "int", nullable: false),
+                    SeverityCode = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
+                    SeverityName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Level = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
+                    ResponseSLA = table.Column<decimal>(type: "decimal(10,2)", precision: 10, scale: 2, nullable: false),
+                    ResolutionSLA = table.Column<decimal>(type: "decimal(10,2)", precision: 10, scale: 2, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SeverityMasters", x => x.SeverityId);
+                    table.ForeignKey(
+                        name: "FK_SeverityMasters_ProjectMasters_ProjectId",
                         column: x => x.ProjectId,
                         principalTable: "ProjectMasters",
                         principalColumn: "ProjectId",
@@ -622,6 +649,12 @@ namespace ngn_data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_FailureSymptoms_ProjectId_FailureSymptomsName",
+                table: "FailureSymptoms",
+                columns: new[] { "ProjectId", "FailureSymptomsName" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_FlashNewsNotification_Status_StartDate_EndDate",
                 table: "FlashNewsNotification",
                 columns: new[] { "Status", "StartDate", "EndDate" });
@@ -690,10 +723,9 @@ namespace ngn_data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_SeverityMasters_SeverityCode",
+                name: "IX_SeverityMasters_ProjectId",
                 table: "SeverityMasters",
-                column: "SeverityCode",
-                unique: true);
+                column: "ProjectId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_StatusMasters_IsActive",
@@ -730,6 +762,9 @@ namespace ngn_data.Migrations
 
             migrationBuilder.DropTable(
                 name: "EquipmentPartNumbers");
+
+            migrationBuilder.DropTable(
+                name: "FailureSymptoms");
 
             migrationBuilder.DropTable(
                 name: "FlashNewsNotification");
