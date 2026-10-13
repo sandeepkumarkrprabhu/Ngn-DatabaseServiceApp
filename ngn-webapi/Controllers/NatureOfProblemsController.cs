@@ -6,7 +6,7 @@ namespace ngn_webapi.Controllers;
 
 [ApiController]
 [Route("api/nature-of-problems")]
-public sealed class NatureOfProblemsController(IMasterCatalogService service) : ControllerBase
+public sealed class NatureOfProblemsController(INatureOfProblemService service) : ControllerBase
 {
     [HttpGet] public async Task<IActionResult> GetAll([FromQuery] int? projectItemId, CancellationToken ct) => Ok(await service.GetNaturesAsync(projectItemId, ct));
     [HttpGet("{id:int}")] public async Task<IActionResult> Get(int id, CancellationToken ct) { var x = await service.GetNatureAsync(id, ct); return x is null ? NotFound() : Ok(x); }
