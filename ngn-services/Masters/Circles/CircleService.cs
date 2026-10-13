@@ -7,11 +7,17 @@ namespace ngn_services.Masters.Circles;
 
 public sealed class CircleService(AppDbContext db) : ICircleService
 {
-    public async Task<IReadOnlyList<CircleResponse>> GetCirclesAsync(CancellationToken ct) =>
-            await db.CircleMaster.AsNoTracking().OrderBy(x => x.CircleName).ThenBy(x => x.CityName).Select(x => CircleDto(x)).ToListAsync(ct);
+    public async Task<IReadOnlyList<CircleResponse>> GetCirclesAsync(CancellationToken ct)
+    {
+        var rows = await db.CircleMaster.AsNoTracking().OrderBy(x => x.CircleName).ThenBy(x => x.CityName).ToListAsync(ct);
+        return rows.Select(CircleDto).ToList();
+    }
 
-    public Task<CircleResponse?> GetCircleAsync(int id, CancellationToken ct) =>
-            db.CircleMaster.AsNoTracking().Where(x => x.CircleCityId == id).Select(x => CircleDto(x)).SingleOrDefaultAsync(ct);
+    public async Task<CircleResponse?> GetCircleAsync(int id, CancellationToken ct)
+    {
+        var x = await db.CircleMaster.AsNoTracking().SingleOrDefaultAsync(x => x.CircleCityId == id, ct);
+        return x is null ? null : CircleDto(x);
+    }
 
     public async Task<MasterOperationResult<CircleResponse>> CreateCircleAsync(CircleRequest r, CancellationToken ct)
         {
