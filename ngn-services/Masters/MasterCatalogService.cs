@@ -10,10 +10,14 @@ public sealed class MasterCatalogService(AppDbContext db) : IMasterCatalogServic
     {
         var q = db.ProjectMasters.AsNoTracking();
         if (!includeInactive) q = q.Where(x => x.IsActive);
-        return await q.OrderBy(x => x.ProjectName).Select(x => ProjectDto(x)).ToListAsync(ct);
+        var rows = await q.Include(x => x.ProjectGroup).OrderBy(x => x.ProjectName).ToListAsync(ct);
+        return rows.Select(ProjectDto).ToList();
     }
-    public Task<ProjectResponse?> GetProjectAsync(int id, CancellationToken ct) =>
-        db.ProjectMasters.AsNoTracking().Where(x => x.ProjectId == id).Select(x => ProjectDto(x)).SingleOrDefaultAsync(ct);
+    public async Task<ProjectResponse?> GetProjectAsync(int id, CancellationToken ct)
+    {
+        var x = await db.ProjectMasters.AsNoTracking().Include(x => x.ProjectGroup).SingleOrDefaultAsync(x => x.ProjectId == id, ct);
+        return x is null ? null : ProjectDto(x);
+    }
     public async Task<MasterOperationResult<ProjectResponse>> CreateProjectAsync(ProjectRequest r, CancellationToken ct)
     {
         var name = r.ProjectName.Trim();
@@ -89,10 +93,14 @@ public sealed class MasterCatalogService(AppDbContext db) : IMasterCatalogServic
     {
         var q = db.SeverityMasters.AsNoTracking();
         if (projectId.HasValue) q = q.Where(x => x.ProjectId == projectId.Value);
-        return await q.OrderBy(x => x.ProjectId).ThenBy(x => x.SeverityName).Select(x => SeverityDto(x)).ToListAsync(ct);
+        var rows = await q.Include(x => x.Project).OrderBy(x => x.ProjectId).ThenBy(x => x.SeverityName).ToListAsync(ct);
+        return rows.Select(SeverityDto).ToList();
     }
-    public Task<SeverityResponse?> GetSeverityAsync(int id, CancellationToken ct) =>
-        db.SeverityMasters.AsNoTracking().Where(x => x.SeverityId == id).Select(x => SeverityDto(x)).SingleOrDefaultAsync(ct);
+    public async Task<SeverityResponse?> GetSeverityAsync(int id, CancellationToken ct)
+    {
+        var x = await db.SeverityMasters.AsNoTracking().Include(x => x.Project).SingleOrDefaultAsync(x => x.SeverityId == id, ct);
+        return x is null ? null : SeverityDto(x);
+    }
     public async Task<MasterOperationResult<SeverityResponse>> CreateSeverityAsync(SeverityRequest r, CancellationToken ct)
     {
         if (!await db.ProjectMasters.AnyAsync(x => x.ProjectId == r.ProjectId && x.IsActive, ct)) return new(null, Error: "The project does not exist or is inactive.");
@@ -113,10 +121,14 @@ public sealed class MasterCatalogService(AppDbContext db) : IMasterCatalogServic
         var q = db.Equipment.AsNoTracking();
         if (!includeInactive) q = q.Where(x => x.IsActive);
         if (projectId.HasValue) q = q.Where(x => x.ProjectId == projectId.Value);
-        return await q.OrderBy(x => x.EquipmentName).Select(x => EquipmentDto(x)).ToListAsync(ct);
+        var rows = await q.Include(x => x.Project).OrderBy(x => x.EquipmentName).ToListAsync(ct);
+        return rows.Select(EquipmentDto).ToList();
     }
-    public Task<EquipmentResponse?> GetEquipmentByIdAsync(int id, CancellationToken ct) =>
-        db.Equipment.AsNoTracking().Where(x => x.EquipmentId == id).Select(x => EquipmentDto(x)).SingleOrDefaultAsync(ct);
+    public async Task<EquipmentResponse?> GetEquipmentByIdAsync(int id, CancellationToken ct)
+    {
+        var x = await db.Equipment.AsNoTracking().Include(x => x.Project).SingleOrDefaultAsync(x => x.EquipmentId == id, ct);
+        return x is null ? null : EquipmentDto(x);
+    }
     public async Task<MasterOperationResult<EquipmentResponse>> CreateEquipmentAsync(EquipmentRequest r, CancellationToken ct)
     {
         if (!await db.ProjectMasters.AnyAsync(x => x.ProjectId == r.ProjectId && x.IsActive, ct)) return new(null, Error: "The project does not exist or is inactive.");
@@ -150,10 +162,14 @@ public sealed class MasterCatalogService(AppDbContext db) : IMasterCatalogServic
         var q = db.EquipmentPartNumbers.AsNoTracking();
         if (!includeInactive) q = q.Where(x => x.IsActive);
         if (equipmentId.HasValue) q = q.Where(x => x.EquipmentId == equipmentId.Value);
-        return await q.OrderBy(x => x.PartNumber).Select(x => PartDto(x)).ToListAsync(ct);
+        var rows = await q.Include(x => x.Equipment).OrderBy(x => x.PartNumber).ToListAsync(ct);
+        return rows.Select(PartDto).ToList();
     }
-    public Task<EquipmentPartNumberResponse?> GetPartNumberAsync(int id, CancellationToken ct) =>
-        db.EquipmentPartNumbers.AsNoTracking().Where(x => x.EquipmentPartNumberId == id).Select(x => PartDto(x)).SingleOrDefaultAsync(ct);
+    public async Task<EquipmentPartNumberResponse?> GetPartNumberAsync(int id, CancellationToken ct)
+    {
+        var x = await db.EquipmentPartNumbers.AsNoTracking().Include(x => x.Equipment).SingleOrDefaultAsync(x => x.EquipmentPartNumberId == id, ct);
+        return x is null ? null : PartDto(x);
+    }
     public async Task<MasterOperationResult<EquipmentPartNumberResponse>> CreatePartNumberAsync(EquipmentPartNumberRequest r, CancellationToken ct)
     {
         if (!await db.Equipment.AnyAsync(x => x.EquipmentId == r.EquipmentId && x.IsActive, ct)) return new(null, Error: "The equipment does not exist or is inactive.");
@@ -185,10 +201,14 @@ public sealed class MasterCatalogService(AppDbContext db) : IMasterCatalogServic
     public async Task<IReadOnlyList<FailureSymptomsResponse>> GetFailureSymptomsAsync(int? projectId, CancellationToken ct)
     {
         var q = db.FailureSymptoms.AsNoTracking(); if (projectId.HasValue) q = q.Where(x => x.ProjectId == projectId.Value);
-        return await q.OrderBy(x => x.FailureSymptomsName).Select(x => FailureDto(x)).ToListAsync(ct);
+        var rows = await q.Include(x => x.Project).OrderBy(x => x.FailureSymptomsName).ToListAsync(ct);
+        return rows.Select(FailureDto).ToList();
     }
-    public Task<FailureSymptomsResponse?> GetFailureSymptomAsync(int id, CancellationToken ct) =>
-        db.FailureSymptoms.AsNoTracking().Where(x => x.FailureSymptomsId == id).Select(x => FailureDto(x)).SingleOrDefaultAsync(ct);
+    public async Task<FailureSymptomsResponse?> GetFailureSymptomAsync(int id, CancellationToken ct)
+    {
+        var x = await db.FailureSymptoms.AsNoTracking().Include(x => x.Project).SingleOrDefaultAsync(x => x.FailureSymptomsId == id, ct);
+        return x is null ? null : FailureDto(x);
+    }
     public async Task<MasterOperationResult<FailureSymptomsResponse>> CreateFailureSymptomAsync(FailureSymptomsRequest r, CancellationToken ct)
     {
         if (!await db.ProjectMasters.AnyAsync(x => x.ProjectId == r.ProjectId && x.IsActive, ct)) return new(null, Error: "The project does not exist or is inactive.");
@@ -210,10 +230,14 @@ public sealed class MasterCatalogService(AppDbContext db) : IMasterCatalogServic
     public async Task<IReadOnlyList<NatureOfProblemResponse>> GetNaturesAsync(int? projectItemId, CancellationToken ct)
     {
         var q = db.NatureOfProblem.AsNoTracking(); if (projectItemId.HasValue) q = q.Where(x => x.ProjectItemId == projectItemId.Value);
-        return await q.OrderBy(x => x.NatureOfProblemName).Select(x => NatureDto(x)).ToListAsync(ct);
+        var rows = await q.Include(x => x.ProjectItem).OrderBy(x => x.NatureOfProblemName).ToListAsync(ct);
+        return rows.Select(NatureDto).ToList();
     }
-    public Task<NatureOfProblemResponse?> GetNatureAsync(int id, CancellationToken ct) =>
-        db.NatureOfProblem.AsNoTracking().Where(x => x.NatureOfProblemId == id).Select(x => NatureDto(x)).SingleOrDefaultAsync(ct);
+    public async Task<NatureOfProblemResponse?> GetNatureAsync(int id, CancellationToken ct)
+    {
+        var x = await db.NatureOfProblem.AsNoTracking().Include(x => x.ProjectItem).SingleOrDefaultAsync(x => x.NatureOfProblemId == id, ct);
+        return x is null ? null : NatureDto(x);
+    }
     public async Task<MasterOperationResult<NatureOfProblemResponse>> CreateNatureAsync(NatureOfProblemRequest r, CancellationToken ct)
     {
         if (r.ProjectItemId.HasValue && !await db.ProjectItemDetails.AnyAsync(x => x.ProjectItemId == r.ProjectItemId.Value, ct)) return new(null, Error: "The project item was not found.");
