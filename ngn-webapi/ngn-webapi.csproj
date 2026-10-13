@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ngn-data\ngn-data.csproj" />
+    <ProjectReference Include="..\ngn-services\ngn-services.csproj" />
   </ItemGroup>
 
 </Project>
