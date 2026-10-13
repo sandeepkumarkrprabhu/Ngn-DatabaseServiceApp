@@ -110,5 +110,3 @@ public sealed class CirclesController(IMasterCatalogService service) : Controlle
     [HttpPost] public async Task<IActionResult> Create(CircleRequest request, CancellationToken ct) { var r = await service.CreateCircleAsync(request, ct); return CreatedAtAction(nameof(Get), new { id = r.Data!.CircleCityId }, r.Data); }
     [HttpPut("{id:int}")] public async Task<IActionResult> Update(int id, CircleRequest request, CancellationToken ct) { var r = await service.UpdateCircleAsync(id, request, ct); return r.NotFound ? NotFound() : Ok(r.Data); }
 }
-
-public sealed record StatusChangeRequest(bool IsActive);
