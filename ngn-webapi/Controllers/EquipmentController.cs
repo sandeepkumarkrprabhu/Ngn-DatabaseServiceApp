@@ -6,7 +6,7 @@ namespace ngn_webapi.Controllers;
 
 [ApiController]
 [Route("api/equipment")]
-public sealed class EquipmentController(IMasterCatalogService service) : ControllerBase
+public sealed class EquipmentController(IEquipmentService service) : ControllerBase
 {
     [HttpGet] public async Task<IActionResult> GetAll([FromQuery] bool includeInactive = false, [FromQuery] int? projectId = null, CancellationToken ct = default) => Ok(await service.GetEquipmentAsync(includeInactive, projectId, ct));
     [HttpGet("{id:int}")] public async Task<IActionResult> Get(int id, CancellationToken ct) { var x = await service.GetEquipmentByIdAsync(id, ct); return x is null ? NotFound() : Ok(x); }
