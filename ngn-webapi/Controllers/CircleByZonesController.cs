@@ -6,7 +6,7 @@ namespace ngn_webapi.Controllers;
 
 [ApiController]
 [Route("api/circle-by-zones")]
-public sealed class CircleByZonesController(IMasterCatalogService service) : ControllerBase
+public sealed class CircleByZonesController(ICircleByZoneService service) : ControllerBase
 {
     [HttpGet] public async Task<IActionResult> GetAll(CancellationToken ct) => Ok(await service.GetCirclesByZoneAsync(ct));
     [HttpGet("{id:int}")] public async Task<IActionResult> Get(int id, CancellationToken ct) { var x = await service.GetCircleByZoneAsync(id, ct); return x is null ? NotFound() : Ok(x); }
