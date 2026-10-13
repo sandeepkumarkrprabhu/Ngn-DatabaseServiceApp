@@ -7,11 +7,17 @@ namespace ngn_services.Masters.CircleByZones;
 
 public sealed class CircleByZoneService(AppDbContext db) : ICircleByZoneService
 {
-    public async Task<IReadOnlyList<CircleByZoneResponse>> GetCirclesByZoneAsync(CancellationToken ct) =>
-            await db.CircleByZones.AsNoTracking().OrderBy(x => x.Zone).ThenBy(x => x.CircleName).Select(x => ZoneDto(x)).ToListAsync(ct);
+    public async Task<IReadOnlyList<CircleByZoneResponse>> GetCirclesByZoneAsync(CancellationToken ct)
+    {
+        var rows = await db.CircleByZones.AsNoTracking().OrderBy(x => x.Zone).ThenBy(x => x.CircleName).ToListAsync(ct);
+        return rows.Select(ZoneDto).ToList();
+    }
 
-    public Task<CircleByZoneResponse?> GetCircleByZoneAsync(int id, CancellationToken ct) =>
-            db.CircleByZones.AsNoTracking().Where(x => x.CircleZoneId == id).Select(x => ZoneDto(x)).SingleOrDefaultAsync(ct);
+    public async Task<CircleByZoneResponse?> GetCircleByZoneAsync(int id, CancellationToken ct)
+    {
+        var x = await db.CircleByZones.AsNoTracking().SingleOrDefaultAsync(x => x.CircleZoneId == id, ct);
+        return x is null ? null : ZoneDto(x);
+    }
 
     public async Task<MasterOperationResult<CircleByZoneResponse>> CreateCircleByZoneAsync(CircleByZoneRequest r, CancellationToken ct)
         {
