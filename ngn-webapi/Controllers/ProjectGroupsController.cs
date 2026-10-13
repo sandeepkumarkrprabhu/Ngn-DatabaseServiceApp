@@ -107,14 +107,6 @@ public sealed class ProjectGroupsController(AppDbContext dbContext) : Controller
         if (entity is null)
             return NotFound();
 
-        if (request.IsActive)
-        {
-            var hasInactiveParent = false;
-            // Project groups have no parent entity; this branch intentionally only reactivates the group.
-            if (hasInactiveParent)
-                return Conflict(new ProblemDetails { Title = "The project group cannot be activated." });
-        }
-
         entity.IsActive = request.IsActive;
         entity.UpdatedDate = DateTime.UtcNow;
         await dbContext.SaveChangesAsync(cancellationToken);
