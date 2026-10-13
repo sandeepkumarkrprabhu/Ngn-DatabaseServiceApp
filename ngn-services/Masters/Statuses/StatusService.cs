@@ -11,11 +11,15 @@ public sealed class StatusService(AppDbContext db) : IStatusService
         {
             var q = db.StatusMasters.AsNoTracking();
             if (!includeInactive) q = q.Where(x => x.IsActive);
-            return await q.OrderBy(x => x.StatusName).Select(x => StatusDto(x)).ToListAsync(ct);
+            var rows = await q.OrderBy(x => x.StatusName).ToListAsync(ct);
+            return rows.Select(StatusDto).ToList();
         }
 
-    public Task<StatusResponse?> GetStatusAsync(int id, CancellationToken ct) =>
-            db.StatusMasters.AsNoTracking().Where(x => x.StatusMasterId == id).Select(x => StatusDto(x)).SingleOrDefaultAsync(ct);
+    public async Task<StatusResponse?> GetStatusAsync(int id, CancellationToken ct)
+    {
+        var x = await db.StatusMasters.AsNoTracking().SingleOrDefaultAsync(x => x.StatusMasterId == id, ct);
+        return x is null ? null : StatusDto(x);
+    }
 
     public async Task<MasterOperationResult<StatusResponse>> CreateStatusAsync(StatusRequest r, CancellationToken ct)
         {
