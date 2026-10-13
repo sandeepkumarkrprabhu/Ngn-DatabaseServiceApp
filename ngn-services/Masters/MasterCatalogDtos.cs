@@ -26,3 +26,4 @@ public sealed record CircleByZoneResponse(int CircleZoneId, string Zone, string 
 public sealed record CircleRequest([Required, StringLength(50)] string CircleCode, [Required, StringLength(100)] string CircleName, [Required, StringLength(50)] string CityCode, [Required, StringLength(100)] string CityName);
 public sealed record CircleResponse(int CircleCityId, string CircleCode, string CircleName, string CityCode, string CityName);
 public sealed record MasterOperationResult<T>(T? Data, bool NotFound = false, bool Conflict = false, string? Error = null);
+public sealed record StatusChangeRequest(bool IsActive);
