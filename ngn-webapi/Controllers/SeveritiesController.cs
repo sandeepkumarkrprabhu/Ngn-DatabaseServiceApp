@@ -6,7 +6,7 @@ namespace ngn_webapi.Controllers;
 
 [ApiController]
 [Route("api/severities")]
-public sealed class SeveritiesController(IMasterCatalogService service) : ControllerBase
+public sealed class SeveritiesController(ISeverityService service) : ControllerBase
 {
     [HttpGet] public async Task<IActionResult> GetAll([FromQuery] int? projectId, CancellationToken ct) => Ok(await service.GetSeveritiesAsync(projectId, ct));
     [HttpGet("{id:int}")] public async Task<IActionResult> Get(int id, CancellationToken ct) { var x = await service.GetSeverityAsync(id, ct); return x is null ? NotFound() : Ok(x); }
