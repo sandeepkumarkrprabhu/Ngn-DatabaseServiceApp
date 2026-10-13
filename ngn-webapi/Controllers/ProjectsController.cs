@@ -6,7 +6,7 @@ namespace ngn_webapi.Controllers;
 
 [ApiController]
 [Route("api/projects")]
-public sealed class ProjectsController(IMasterCatalogService service) : ControllerBase
+public sealed class ProjectsController(IProjectService service) : ControllerBase
 {
     [HttpGet] public async Task<IActionResult> GetAll([FromQuery] bool includeInactive = false, CancellationToken ct = default) => Ok(await service.GetProjectsAsync(includeInactive, ct));
     [HttpGet("{id:int}")] public async Task<IActionResult> Get(int id, CancellationToken ct) { var x = await service.GetProjectAsync(id, ct); return x is null ? NotFound() : Ok(x); }
