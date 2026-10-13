@@ -6,7 +6,7 @@ namespace ngn_webapi.Controllers;
 
 [ApiController]
 [Route("api/failure-symptoms")]
-public sealed class FailureSymptomsController(IMasterCatalogService service) : ControllerBase
+public sealed class FailureSymptomsController(IFailureSymptomsService service) : ControllerBase
 {
     [HttpGet] public async Task<IActionResult> GetAll([FromQuery] int? projectId, CancellationToken ct) => Ok(await service.GetFailureSymptomsAsync(projectId, ct));
     [HttpGet("{id:int}")] public async Task<IActionResult> Get(int id, CancellationToken ct) { var x = await service.GetFailureSymptomAsync(id, ct); return x is null ? NotFound() : Ok(x); }
