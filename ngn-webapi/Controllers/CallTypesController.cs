@@ -6,7 +6,7 @@ namespace ngn_webapi.Controllers;
 
 [ApiController]
 [Route("api/call-types")]
-public sealed class CallTypesController(IMasterCatalogService service) : ControllerBase
+public sealed class CallTypesController(ICallTypeService service) : ControllerBase
 {
     [HttpGet] public async Task<IActionResult> GetAll(CancellationToken ct) => Ok(await service.GetCallTypesAsync(ct));
     [HttpGet("{id:int}")] public async Task<IActionResult> Get(int id, CancellationToken ct) { var x = await service.GetCallTypeAsync(id, ct); return x is null ? NotFound() : Ok(x); }
