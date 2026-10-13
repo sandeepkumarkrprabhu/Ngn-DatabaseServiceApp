@@ -6,7 +6,7 @@ namespace ngn_webapi.Controllers;
 
 [ApiController]
 [Route("api/statuses")]
-public sealed class StatusesController(IMasterCatalogService service) : ControllerBase
+public sealed class StatusesController(IStatusService service) : ControllerBase
 {
     [HttpGet] public async Task<IActionResult> GetAll([FromQuery] bool includeInactive = false, CancellationToken ct = default) => Ok(await service.GetStatusesAsync(includeInactive, ct));
     [HttpGet("{id:int}")] public async Task<IActionResult> Get(int id, CancellationToken ct) { var x = await service.GetStatusAsync(id, ct); return x is null ? NotFound() : Ok(x); }
