@@ -6,7 +6,7 @@ namespace ngn_webapi.Controllers;
 
 [ApiController]
 [Route("api/equipment-part-numbers")]
-public sealed class EquipmentPartNumbersController(IMasterCatalogService service) : ControllerBase
+public sealed class EquipmentPartNumbersController(IEquipmentPartNumberService service) : ControllerBase
 {
     [HttpGet] public async Task<IActionResult> GetAll([FromQuery] bool includeInactive = false, [FromQuery] int? equipmentId = null, CancellationToken ct = default) => Ok(await service.GetPartNumbersAsync(includeInactive, equipmentId, ct));
     [HttpGet("{id:int}")] public async Task<IActionResult> Get(int id, CancellationToken ct) { var x = await service.GetPartNumberAsync(id, ct); return x is null ? NotFound() : Ok(x); }
