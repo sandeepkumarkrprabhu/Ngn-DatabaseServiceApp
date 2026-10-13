@@ -7,11 +7,17 @@ namespace ngn_services.Masters.CallTypes;
 
 public sealed class CallTypeService(AppDbContext db) : ICallTypeService
 {
-    public async Task<IReadOnlyList<CallTypeResponse>> GetCallTypesAsync(CancellationToken ct) =>
-            await db.CallTypeMaster.AsNoTracking().OrderBy(x => x.CallName).Select(x => CallDto(x)).ToListAsync(ct);
+    public async Task<IReadOnlyList<CallTypeResponse>> GetCallTypesAsync(CancellationToken ct)
+    {
+        var rows = await db.CallTypeMaster.AsNoTracking().OrderBy(x => x.CallName).ToListAsync(ct);
+        return rows.Select(CallDto).ToList();
+    }
 
-    public Task<CallTypeResponse?> GetCallTypeAsync(int id, CancellationToken ct) =>
-            db.CallTypeMaster.AsNoTracking().Where(x => x.CallTypeId == id).Select(x => CallDto(x)).SingleOrDefaultAsync(ct);
+    public async Task<CallTypeResponse?> GetCallTypeAsync(int id, CancellationToken ct)
+    {
+        var x = await db.CallTypeMaster.AsNoTracking().SingleOrDefaultAsync(x => x.CallTypeId == id, ct);
+        return x is null ? null : CallDto(x);
+    }
 
     public async Task<MasterOperationResult<CallTypeResponse>> CreateCallTypeAsync(CallTypeRequest r, CancellationToken ct)
         {
