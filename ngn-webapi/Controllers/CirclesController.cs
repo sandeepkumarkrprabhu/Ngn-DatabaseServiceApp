@@ -6,7 +6,7 @@ namespace ngn_webapi.Controllers;
 
 [ApiController]
 [Route("api/circles")]
-public sealed class CirclesController(IMasterCatalogService service) : ControllerBase
+public sealed class CirclesController(ICircleService service) : ControllerBase
 {
     [HttpGet] public async Task<IActionResult> GetAll(CancellationToken ct) => Ok(await service.GetCirclesAsync(ct));
     [HttpGet("{id:int}")] public async Task<IActionResult> Get(int id, CancellationToken ct) { var x = await service.GetCircleAsync(id, ct); return x is null ? NotFound() : Ok(x); }
