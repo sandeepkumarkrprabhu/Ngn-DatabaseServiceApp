@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using ngn_services.Masters;
 using ngn_services.Masters.NatureOfProblems;
 
 namespace ngn_webapi.Controllers;

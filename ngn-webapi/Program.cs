@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using ngn_data;
-using ngn_services.Masters;
 using ngn_services.Masters.Projects;
 using ngn_services.Masters.Statuses;
 using ngn_services.Masters.Severities;
